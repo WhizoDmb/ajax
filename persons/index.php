@@ -14,10 +14,10 @@
 <body>
 
     <center>
-        <div class="container">
+        <div class="container col-12">
             <h1>Employee's live search</h1>
             <div class="mb-3">
-                <input type="text" class="form-control w-50" name="live_search" id="live_search" autocomplete="off" placeholder="Search an employee..." />
+                <input type="text" class="form-control w-100" name="live_search" id="live_search" autocomplete="off" placeholder="Search an employee..." />
                 <small id="helpId" class="form-text text-muted"></small>
             </div>
 
@@ -26,15 +26,17 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-9">
+            <div class="col-10">
                 <div class="container" id="searchresult"></div>
             </div>
-            <div class="col-3">
-                <button class="btn btn-primary col-12" id="loadFav">Ver favoritos</button>
+            <div class="col-2">
+                <button class="btn btn-primary col-12" id="loadFav">Cargar favoritos</button>
                 <div class="container" id="fav"></div>
             </div>
         </div>
     </div>
+
+
 
 
 
@@ -48,7 +50,6 @@
         $(document).ready(function() {
             $("#live_search").keyup(function() {
                 var input = $(this).val();
-                //alert(input);
 
                 if (input != "") {
                     $.ajax({
@@ -57,31 +58,41 @@
                         data: {
                             input: input
                         },
-
                         success: function(data) {
                             $("#searchresult").html(data);
                             $("#searchresult").css("display", "block");
+                        },
+                        error: function() {
+                            console.log('Error al obtener los datos.');
                         }
-                    })
+                    });
                 } else {
                     $("#searchresult").css("display", "none");
                 }
-            })
-        })
+            });
+
+            // Agrega un intervalo para actualizar cada 5 segundos
+            setInterval(function() {
+                $("#live_search").trigger("keyup");
+            }, 500);
+        });
     </script>
     <script>
         $(document).ready(function() {
             $('#loadFav').click(function() {
-                $.ajax({
-                    url: 'src/query/readEOTM.php',
-                    method: 'GET',
-                    success: function(response) {
-                        $('#fav').html(response);
-                    },
-                    error: function() {
-                        alert('Error al cargar el documento.');
-                    }
-                });
+                // Realiza la petición AJAX cada 5 segundos
+                setInterval(function() {
+                    $.ajax({
+                        url: 'src/query/readEOTM.php',
+                        method: 'GET',
+                        success: function(response) {
+                            $('#fav').html(response);
+                        },
+                        error: function() {
+                            alert('Error al cargar empleados del mes.');
+                        }
+                    });
+                }, 500); // Intervalo de 5000 milisegundos (5 segundos)
             });
         });
     </script>

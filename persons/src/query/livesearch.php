@@ -33,6 +33,7 @@ JOIN
 
     if (!empty($select)) {
 ?>
+        <h1>EMPLEADOS</h1>
         <div class="table-responsive">
             <table class="table table-light mt-5">
                 <thead>
@@ -44,12 +45,23 @@ JOIN
                         <th scope="col">EMAIL</th>
                         <th scope="col">PHONE</th>
                         <th scope="col">OCCUPATION</th>
-                        <th scope="col">ACTION</th>
+                        <th scope="col" colspan="2">
+                            <center>ACTIONS</center>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     foreach ($select as $person) {
+                        $disabled = "";
+                        $id = $person['id'];
+
+                        $query = "SELECT * FROM `employee_of_the_month` WHERE `employee`=$id";
+                        $exists = $db->seleccionarDatos($query);
+
+                        if (!empty($exists)) {
+                            $disabled = "disabled";
+                        }
                     ?>
                         <tr class="">
                             <td scope="row"><?php echo $person['id']; ?></td>
@@ -60,9 +72,12 @@ JOIN
                             <td scope="row"><?php echo $person['phone']; ?></td>
                             <td scope="row"><?php echo $person['workstation']; ?></td>
                             <td>
-                                <button class="btn btn-primary add-to-favorites" data-id="<?php echo $person['id']; ?>">
-                                    Add to favourites
+                                <button class="btn btn-success <?php echo $disabled; ?> add-to-favorites" data-id="<?php echo $person['id']; ?>">
+                                    Add to EOTM
                                 </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary edit-employee-btn" data-id="1">Editar</button>
                             </td>
                         </tr>
                     <?php
