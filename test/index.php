@@ -93,7 +93,6 @@ $db = new Database;
   $decoded_data = json_decode($data, true);
 
   $product_info = $decoded_data['Search'];
-  print_r($product_info);
   ?>
 
 
